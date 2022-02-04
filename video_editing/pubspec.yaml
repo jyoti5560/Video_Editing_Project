@@ -38,6 +38,8 @@ dependencies:
   carousel_slider:
   audioplayers: ^0.20.1
   assets_audio_player: ^3.0.3+9
+  video_player:
+  path_provider:
 
 
 dev_dependencies:

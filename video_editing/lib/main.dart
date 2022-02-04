@@ -636,11 +636,12 @@ class _VideoPickerPageState extends State<VideoPickerPage> {
             ),
 
             ElevatedButton(
-              onPressed: () {
-                Navigator.push(
+              onPressed: () async {
+                /*Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddMusic()),
-                );
+                );*/
+                await videoPick();
               },
               child: Text('Add music'),
             ),
@@ -648,6 +649,18 @@ class _VideoPickerPageState extends State<VideoPickerPage> {
         ),
       ),
     );
+  }
+
+  videoPick() async {
+    final XFile? file = await imagePicker.pickVideo(source: ImageSource.gallery);
+    //var images = await ExportVideoFrame.exportImage(file!.path, 10, 0);
+    if (file != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddMusic(file: file,)),
+      );
+      // context.to(VideoEditor(file: File(file.path)));
+    }
   }
 
   Future _compressVideo() async {
@@ -800,23 +813,23 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
   File? compressFile;
   bool isplaying = false;
 
-  late AnimationController _animationIconController1;
+ // late AnimationController _animationIconController1;
 
-  AudioCache ? audioCache;
+  //AudioCache ? audioCache;
 
-  late AudioPlayer audioPlayer;
+  //late AudioPlayer audioPlayer;
 
   Duration _duration = new Duration();
   Duration _position = new Duration();
 
-  bool issongplaying = false;
+  // bool issongplaying = false;
+  //
+  // void seekToSeconds(int second) {
+  //   Duration newDuration = Duration(seconds: second);
+  //   audioPlayer.seek(newDuration);
+  // }
 
-  void seekToSeconds(int second) {
-    Duration newDuration = Duration(seconds: second);
-    audioPlayer.seek(newDuration);
-  }
-
-  void initPlayer() {
+ /* void initPlayer() {
     _animationIconController1 = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 750),
@@ -840,17 +853,18 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
     // audioPlayer.positionHandler = (p) => setState(() {
     //       _position = p;
     //     });
-  }
+  }*/
 
   @override
   void initState() {
     _controller = VideoEditorController.file(widget.file,
         maxDuration: Duration(seconds: 30))
       ..initialize().then((_) => setState(() {}));
-    iconController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+    //_controller.video.setVolume(0);
+    // iconController = AnimationController(
+    //     vsync: this, duration: Duration(milliseconds: 1000));
 
-    audioPlayer1.open(Audio('assets/Song1.mp3'),autoStart: false,showNotification: true);
+    //audioPlayer1.open(Audio('assets/Song1.mp3'),autoStart: false,showNotification: true);
     //initPlayer();
     super.initState();
   }
@@ -861,14 +875,14 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
     _isExporting.dispose();
     _controller.dispose();
 
-    iconController.dispose();
-    audioPlayer1.dispose();
+    // iconController.dispose();
+    // audioPlayer1.dispose();
     super.dispose();
   }
 
-  late AnimationController
-  iconController;
-  AssetsAudioPlayer audioPlayer1 = AssetsAudioPlayer();
+  // late AnimationController
+  // iconController;
+  // AssetsAudioPlayer audioPlayer1 = AssetsAudioPlayer();
   bool isAnimated = false;
 
   void _openCropScreen() => context.to(CropScreen(controller: _controller));
@@ -999,7 +1013,7 @@ class _VideoEditorState extends State<VideoEditor> with TickerProviderStateMixin
                                           _controller.video.play();
 
                                           // setState(() {
-                                          //   isplaying ? _animationIconController1.reverse() : _animationIconController1.forward();
+                                          //   isplaying ? _animationIconController1!.reverse() : _animationIconController1!.forward();
                                           //   isplaying = !isplaying;
                                           //   print('isplaying : $isplaying');
                                           // });
