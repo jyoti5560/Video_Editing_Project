@@ -115,14 +115,14 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
         title: Text("Add Music"),
         centerTitle: true,
         actions: [
-          GestureDetector(
-            onTap: () async {
-              // final video = File(_controller!.value.toString());
-              // await GallerySaver.saveVideo('${video.path}');
-              // print('path: ${video.path}');
-              load_path_video();
-            },
-              child: Icon(Icons.save_alt))
+          // GestureDetector(
+          //   onTap: () async {
+          //     // final video = File(_controller!.value.toString());
+          //     // await GallerySaver.saveVideo('${video.path}');
+          //     // print('path: ${video.path}');
+          //     load_path_video();
+          //   },
+          //     child: Icon(Icons.save_alt))
         ],
       ),
       body: Center(
@@ -157,6 +157,7 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
                 // });
                 if (_controller!.value.isPlaying) {
                   audioCache!.play("Song1.mp3");
+                 // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
                   setState(() {
                     issongplaying = true;
                   });

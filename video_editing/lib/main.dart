@@ -628,12 +628,12 @@ class _VideoPickerPageState extends State<VideoPickerPage> {
               child: Text('Compress Video From Camera'),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                selectImages();
-              },
-              child: Text('Create Video Using Multiple Images'),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     selectImages();
+            //   },
+            //   child: Text('Create Video Using Multiple Images'),
+            // ),
 
             ElevatedButton(
               onPressed: () async {
