@@ -524,7 +524,6 @@ class CropScreen extends StatelessWidget {
 
 import 'dart:io';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -762,10 +761,10 @@ class _VideoPickerPageState extends State<VideoPickerPage> {
             imageFileList.add(ImageFileItem(file: selectedImages[i]));
           }
         });
-        Navigator.push(
+        /*Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => VideoFileScreen(imageFileList: imageFileList,)),
-        );
+        );*/
         //Get.to(()=> CollageScreen());
       } else if(selectedImages.length >= 11 ){
 

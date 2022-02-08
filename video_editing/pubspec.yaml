@@ -35,9 +35,8 @@ dependencies:
   video_compress: ^3.1.0
   file_selector:
   fluttertoast: ^8.0.8
-  carousel_slider:
   audioplayers: ^0.20.1
-  assets_audio_player: ^3.0.3+9
+  #assets_audio_player: ^3.0.3+9
   video_player:
   path_provider:
 

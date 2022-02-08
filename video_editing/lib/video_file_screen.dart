@@ -1,8 +1,9 @@
+/*
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:carousel_slider/carousel_slider.dart';
+//import 'package:carousel_slider/carousel_slider.dart';
 //import 'package:create_video/main.dart';
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
@@ -41,9 +42,11 @@ class _VideoFileScreenState extends State<VideoFileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      /*body: Center(
+      */
+/*body: Center(
         child: Image.file(File('${widget.imageFileList[0].file.path}')),
-      ),*/
+      ),*//*
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -103,7 +106,8 @@ class _VideoFileScreenState extends State<VideoFileScreen> {
               ),
             ),
 
-            /*ElevatedButton(
+            */
+/*ElevatedButton(
               onPressed: () {
                 controller.start();
               },
@@ -128,10 +132,12 @@ class _VideoFileScreenState extends State<VideoFileScreen> {
                 );
               },
               child: Text('show recoded video'),
-            ),*/
+            ),*//*
+
           ],
         ),
       ),
     );
   }
 }
+*/

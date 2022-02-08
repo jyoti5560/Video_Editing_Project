@@ -17,10 +17,10 @@ class AddMusic extends StatefulWidget {
 
 class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
 
-  VideoPlayerController ? _controller;
+  VideoPlayerController ? controller;
 
   // To Do
-  late AnimationController _animationIconController1;
+  late AnimationController animationIconController1;
   AudioCache ? audioCache;
   late AudioPlayer audioPlayer;
   Duration _duration = new Duration();
@@ -29,6 +29,8 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
   bool issongplaying = false;
 
   bool isplaying = false;
+  int ? time;
+  Duration ? dur;
 
   void seekToSeconds(int second) {
     Duration newDuration = Duration(seconds: second);
@@ -38,20 +40,62 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(File(widget.file.path))
-      ..initialize().then((_) {
+
+    controller = VideoPlayerController.file(File(widget.file.path))
+      ..initialize().then((_) async {
         //_controller!.setLooping(true);
-        _controller!.setVolume(0);
+        controller!.setVolume(0);
+
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
+        setState(()  {
+          print('Video Duration: ${controller!.value.duration.inSeconds}');
+
+          // if(_controller!.value.position == _controller!.value.duration){
+          //     setState(() {
+          //       Duration player = Duration(milliseconds: _controller!.value.position.inMilliseconds.round());
+          //       nowTime = [player.inHours, player.inMinutes, player.inSeconds]
+          //           .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
+          //           .join(':');
+          //
+          //     });
+          //     print('now time: $nowTime');
+          //     if(nowTime!.isEmpty){
+          //        audioPlayer.pause();
+          //        audioPlayer.stop();
+          //     }
+          //   }else{
+          //     print('empty');
+          //     audioPlayer.pause();
+          //     audioPlayer.stop();
+          //   }
+
+
+          //if(_controller!.value.duration)
+           //_duration = _controller!.value.duration;
+        });
       });
+    controller!.addListener(checkVideo);
 
     initPlayer();
     //load_path_video();
   }
 
+  void checkVideo(){
+    // Implement your calls inside these conditions' bodies :
+    if(controller!.value.position == Duration(seconds: 0, minutes: 0, hours: 0)) {
+      print('video Started');
+    }
+    print('Video position: ${controller!.value.position}');
+    print('Video duration: ${controller!.value.duration}');
+    if(controller!.value.position == controller!.value.duration) {
+      print('video Ended');
+      audioPlayer.stop();
+    }
+
+  }
+
   void initPlayer() {
-    _animationIconController1 = AnimationController(
+    animationIconController1 = AnimationController(
       vsync: this,
       duration:  Duration(milliseconds: 750),
       reverseDuration: Duration(milliseconds: 750),
@@ -60,15 +104,26 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     audioPlayer = new AudioPlayer();
     audioCache = new AudioCache(fixedPlayer: audioPlayer);
 
-    _controller!.value.isPlaying ? audioCache!.play("Song1.mp3") : audioPlayer.pause();
+    //_controller!.value.isPlaying ? audioCache!.play("Song1.mp3") : audioPlayer.pause();
+
+    // audioPlayer.onDurationChanged.listen((Duration d) {
+    //   setState(() {
+    //     _duration = d;
+    //   });
+    //   print('Max duration: $_duration');
+    // });
+
     // audioPlayer.getDuration().then((d) {
+    //
     //   setState(() {
     //     _duration = Duration(milliseconds: d);
+    //     print('Total duration: ${_duration.inSeconds}');
     //   });
     // });
     // audioPlayer.getCurrentPosition().then((p) {
     //   setState(() {
     //     _position = Duration(minutes: p);
+    //     print('position: $_position');
     //   });
     // });
     // audioPlayer.durationHandler = (d) => setState(() {
@@ -82,7 +137,7 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
   @override
   void dispose() {
     super.dispose();
-    _controller!.dispose();
+    controller!.dispose();
   }
   String ? dirPath;
   bool loading = false;
@@ -107,11 +162,14 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
     File videoFile = File("${documentsDirectory.path}/$video");
     GallerySaver.saveVideo(widget.file.path, albumName: "Video Maker");
   }
-
+  String ? nowTime;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.white,
       appBar: AppBar(
+       // actionsIconTheme: IconThemeData(color: Colors.black),
+        //backgroundColor: Colors.white,
         title: Text("Add Music"),
         centerTitle: true,
         actions: [
@@ -129,47 +187,53 @@ class _AddMusicState extends State<AddMusic> with TickerProviderStateMixin {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _controller!.value.isInitialized
+            controller!.value.isInitialized
                 ? Container(
               height: MediaQuery.of(context).size.height,
               //aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
+              child: VideoPlayer(controller!),
             )
                 : Container(),
 
             GestureDetector(
-              onTap: (){
-                print('Duration: ${_controller!.value.duration.inSeconds}');
-                print('isplaying : ${_controller!.value.isPlaying}');
+              onTap: ()async{
+                //print('Video Duration: ${_controller!.value.duration.inSeconds}');
+                print('Duration1: $_duration');
+
                 setState(() {
-                  _controller!.value.isPlaying
-                      ? _controller!.pause()
-                      : _controller!.play();
-                  print('data source : ${_controller!.dataSource}');
+                  controller!.value.isPlaying
+                      ? controller!.pause()
+                      : controller!.play();
+                  print('data source : ${controller!.dataSource}');
                 });
 
                 //to do
-                // setState(() {
-                //   isplaying
-                //       ? _animationIconController1.reverse()
-                //       : _animationIconController1.forward();
-                //   isplaying = !isplaying;
-                // });
-                if (_controller!.value.isPlaying) {
-                  audioCache!.play("Song1.mp3");
-                 // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-                  setState(() {
-                    issongplaying = true;
-                  });
+                setState(() {
+                  isplaying
+                      ? animationIconController1.reverse()
+                      : animationIconController1.forward();
+                  isplaying = !isplaying;
+                });
+                if (controller!.value.isPlaying) {
+                  print('isPlaying: ${controller!.value.isPlaying}');
+                   audioCache!.play("Song1.mp3");
+
+                   // audioPlayer.play('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+                 //  setState(() {
+                 //    issongplaying = true;
+                 //  });
                 } else {
+                  print('isPlaying: ${controller!.value.isPlaying}');
                   audioPlayer.pause();
-                  setState(() {
-                    issongplaying = false;
-                  });
+
+                  // setState(() {
+                  //   issongplaying = false;
+                  // });
                 }
               },
               child: Icon(
-                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,color: Colors.white,
+                controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
               ),
             ),
           ],
